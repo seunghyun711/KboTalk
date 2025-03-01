@@ -1,4 +1,4 @@
-package KBOT.kboTalk.domain.member;
+package KBOT.kboTalk.domain.member.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
