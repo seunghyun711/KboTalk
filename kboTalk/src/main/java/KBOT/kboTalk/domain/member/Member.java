@@ -27,6 +27,22 @@ public class Member {
     @Column
     private String profileImgUrl; // 프로필 이미지 url
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private MemberType memberType; // 회원 유형
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private MemberStatus memberStatus = MemberStatus.ACTIVE; // 회원 상태(기본 상태는 활동)
+
+    public void setMemberStatus(MemberStatus memberStatus) {
+        this.memberStatus = memberStatus;
+    }
+
+    public void setMemberType(MemberType memberType) {
+        this.memberType = memberType;
+    }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
