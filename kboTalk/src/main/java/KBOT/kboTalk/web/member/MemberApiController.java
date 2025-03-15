@@ -18,8 +18,13 @@ public class MemberApiController {
     // 닉네임 중복 확인
     @GetMapping("/checkNickname")
     public ResponseEntity<?> checkNickname(@RequestParam("nickname") String nickname) {
-        memberService.checkNickname(nickname);
+        boolean isExistNickname = memberService.checkNickname(nickname);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        // 닉네임 존재 여부에 따라 다른 상태를 리턴
+        if (isExistNickname) { // 닉네임 중복인 경우
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else { // 닉네임이 중복되지 않은 경우
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }

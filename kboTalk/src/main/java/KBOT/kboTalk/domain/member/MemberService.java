@@ -33,6 +33,23 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    /**
+     * <닉네임 중복 확인>
+     * 1. 닉네임 중복 확인
+     * 2. 사용하고자 하는 닉네임이 존재하면 true,를 아니면 false를 리턴
+     */
+    public boolean checkNickname(String nickname) {
+        // 1. 닉네임 중복 확인
+        Optional<Member> findNickname = memberRepository.findByNickname(nickname);
+
+        // 2. 사용하고자 하는 닉네임이 존재하면 true,를 아니면 false를 리턴
+        if (findNickname.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // 유저 아이디 중복 확인 메서드
     // TODO : 유저 아이디 중복인 경우 예외 처리
     private void verifyExistsUserId(String userId) {
