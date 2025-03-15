@@ -32,9 +32,9 @@ class MemberServiceTest {
         dto.setUserId("test123");
         dto.setNickname("test");
         dto.setPassword("1234");
-        dto.setTeam("SSG Landers");
+//        dto.setTeam("SSG Landers");
         dto.setCheckPassword("1234");
-        dto.setMemberType(MemberType.USER);
+//        dto.setMemberType(MemberType.USER);
         dto.setProfileImage("ssg.img");
 
         Member member = mapper.joinDtoToMember(dto);
@@ -46,6 +46,20 @@ class MemberServiceTest {
         assertThat(newMember).isNotNull();
         assertThat(newMember.getUserId()).isEqualTo("test123");
         assertThat(newMember.getNickname()).isEqualTo("test");
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 검증 테스트")
+    public void checkNickname() {
+        // given
+        String nickname = "hongdangmoo";
+
+        // when
+        memberService.checkNickname(nickname);
+
+        // then
+//        assertThat(nickname).isNotEqualTo("hongdnagmoo");
+//        assertThat(nickname).isEqualTo("hongdnagmoo");
     }
 
 }
