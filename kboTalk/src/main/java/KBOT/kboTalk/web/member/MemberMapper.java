@@ -14,7 +14,6 @@ public class MemberMapper {
             member.setUserId(dto.getUserId());
             member.setNickname(dto.getNickname());
             member.setPassword(dto.getPassword());
-            member.setMemberType(dto.getMemberType());
             member.setProfileImgUrl(dto.getProfileImage());
 
             return member;

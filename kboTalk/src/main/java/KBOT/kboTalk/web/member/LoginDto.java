@@ -1,5 +1,6 @@
 package KBOT.kboTalk.web.member;
 
+import KBOT.kboTalk.domain.member.MemberStatus;
 import KBOT.kboTalk.domain.member.MemberType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,9 @@ public class LoginDto { // 로그인 관련 dto
         private String userId; // 회원 아이디
 
         @NotBlank
+        private String checkUserId; // 아이디 중복 검증을 위한 필드
+
+        @NotBlank
         private String password; // 비밀 번호
 
         @NotBlank
@@ -25,12 +29,6 @@ public class LoginDto { // 로그인 관련 dto
 
         @NotBlank
         private String nickname; // 닉네임
-
-        @NotBlank
-        private String team; // 응원 팀
-
-        @NotBlank
-        private MemberType memberType; // 회원 유형
 
         private String profileImage; // 프로필 이미지
     }

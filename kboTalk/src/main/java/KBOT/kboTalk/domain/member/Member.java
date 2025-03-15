@@ -29,7 +29,8 @@ public class Member {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private MemberType memberType; // 회원 유형
+    // TODO : 아이디에 따라 ADMIN, USER 권한 구분하도록 로직 추가할 것
+    private MemberType memberType = MemberType.USER; // 회원 유형
 
     @Column
     @Enumerated(EnumType.STRING)
