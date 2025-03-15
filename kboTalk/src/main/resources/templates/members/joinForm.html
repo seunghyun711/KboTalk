@@ -3,10 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>로그인</title>
+    <title>KboTalk</title>
 
     <!-- 공통 Head 영역을 추가 -->
     <th:block th:replace="~{fragment/header :: commonHead}"></th:block>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- 닉네임 중복 확인용 JS 파일 추가 -->
+    <script th:src="@{/js/nicknameCheck.js}"></script>
 
     <style>
         .container {
@@ -52,6 +55,7 @@
             <label for="nickname">닉네임</label>
             <input type="text" id="nickname" th:field="*{nickname}" class="form-control"
                    th:errorclass="field-error">
+            <button type="button" class="btn btn-outline-secondary mt-2" id="checkNicknameBtn">중복 확인</button>
             <div class="field-error" th:errors="*{nickname}"></div>
         </div>
         <div>
