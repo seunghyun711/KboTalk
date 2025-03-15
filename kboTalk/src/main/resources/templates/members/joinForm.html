@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+
+    <!-- 공통 Head 영역을 추가 -->
+    <th:block th:replace="~{fragment/header :: commonHead}"></th:block>
+
+    <style>
+        .container {
+            max-width: 560px;
+        }
+
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 헤더 추가 -->
+<div th:replace="~{fragment/header :: header}"></div>
+
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>회원가입</h2>
+    </div>
+    <form action="item.html" th:action th:object="${member}" method="post">
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+        </div>
+        <div>
+            <label for="userId">로그인 ID</label>
+            <input type="text" id="userId" th:field="*{userId}" class="form-control"
+                   th:errorclass="field-error">
+            <div class="field-error" th:errors="*{userId}"></div>
+        </div>
+        <div>
+            <label for="checkUserId">ID 중복 확인</label>
+            <input type="text" id="checkUserId" th:field="*{checkUserId}" class="form-control"
+                   th:errorclass="field-error">
+<!--            <div class="col">-->
+<!--                <button class="w-100 btn btn-primary btn-lg" type="submit">중복 확인</button>-->
+<!--            </div>-->
+            <div class="field-error" th:errors="*{checkUserId}"></div>
+        </div>
+        <div>
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" th:field="*{nickname}" class="form-control"
+                   th:errorclass="field-error">
+            <div class="field-error" th:errors="*{nickname}"></div>
+        </div>
+        <div>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" th:field="*{password}" class="form-control"
+                   th:errorclass="field-error">
+            <div class="field-error" th:errors="*{password}"></div>
+        </div>
+        <div>
+            <label for="checkPassword">비밀번호 확인</label>
+            <input type="password" id="checkPassword" th:field="*{checkPassword}" class="form-control"
+                   th:errorclass="field-error">
+<!--            <div class="col">-->
+<!--                <button class="w-100 btn btn-primary btn-lg" type="submit">비밀번호 확인</button>-->
+<!--            </div>-->
+            <div class="field-error" th:errors="*{checkPassword}"></div>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">회원가입</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='items.html'"
+                        th:onclick="|location.href='@{/}'|"
+                        type="button">취소</button>
+            </div>
+        </div>
+    </form>
+</div> <!-- /container -->
+
+</body>
+</html>
