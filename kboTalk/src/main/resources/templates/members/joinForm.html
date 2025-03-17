@@ -8,8 +8,10 @@
     <!-- 공통 Head 영역을 추가 -->
     <th:block th:replace="~{fragment/header :: commonHead}"></th:block>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- 회원가입 요청 js 파일 추가 -->
+    <script th:src="@{/js/member/member.js}"></script>
     <!-- 닉네임 중복 확인용 JS 파일 추가 -->
-    <script th:src="@{/js/nicknameCheck.js}"></script>
+    <script th:src="@{/js/member/nicknameCheck.js}"></script>
 
     <style>
         .container {
