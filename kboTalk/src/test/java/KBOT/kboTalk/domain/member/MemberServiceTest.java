@@ -62,4 +62,20 @@ class MemberServiceTest {
 //        assertThat(nickname).isEqualTo("hongdnagmoo");
     }
 
+    @Test
+    @DisplayName("유저 아이디 중복 검증 테스트")
+    public void checkUserId() {
+        // given
+        Member member = new Member();
+        member.setUserId("hongdangmoo997");
+        memberRepository.save(member);
+
+        String userId = "hongdangmoo997";
+
+        // when
+        boolean isExistUserId = memberService.checkUserId(userId);
+
+        // then
+        System.out.println("isExistUserId = " + isExistUserId);
+    }
 }
