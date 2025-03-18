@@ -34,6 +34,23 @@ public class MemberService {
     }
 
     /**
+     * <유저 아이디 중복 확인>
+     * 1. 유저 아이디 중복 확인
+     * 2. 사용하고자 하는 닉네임이 존재하면 true를, 아니면 false를 리턴
+     */
+    public boolean checkUserId(String userId) {
+        // 1. 유저 아이디 중복 확인
+        Optional<Member> findUserId = memberRepository.findByUserId(userId);
+
+        // 2. 사용하고자 하는 닉네임이 존재하면 true를, 아니면 false를 리턴
+        if (findUserId.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * <닉네임 중복 확인>
      * 1. 닉네임 중복 확인
      * 2. 사용하고자 하는 닉네임이 존재하면 true,를 아니면 false를 리턴

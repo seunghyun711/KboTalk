@@ -15,9 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberApiController {
     private final MemberService memberService;
 
-    // 닉네임 중복 확인
+    // 회원 아이디 중복 확인 TODO : 예외 처리 추가
+    @GetMapping("/checkUserId")
+    public ResponseEntity<HttpStatus> checkUserId(@RequestParam("userId") String userId) {
+        boolean isExistUserId = memberService.checkUserId(userId);
+
+        // 닉네임 존재 여부에 따라 다른 상태 리턴
+        if (isExistUserId) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
+    // 닉네임 중복 확인 TODO : 예외 처리 추가
     @GetMapping("/checkNickname")
-    public ResponseEntity<?> checkNickname(@RequestParam("nickname") String nickname) {
+    public ResponseEntity<HttpStatus> checkNickname(@RequestParam("nickname") String nickname) {
         boolean isExistNickname = memberService.checkNickname(nickname);
 
         // 닉네임 존재 여부에 따라 다른 상태를 리턴
