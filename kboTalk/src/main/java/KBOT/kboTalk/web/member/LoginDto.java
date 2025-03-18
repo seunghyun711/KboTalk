@@ -19,9 +19,6 @@ public class LoginDto { // 로그인 관련 dto
         private String userId; // 회원 아이디
 
         @NotBlank
-        private String checkUserId; // 아이디 중복 검증을 위한 필드
-
-        @NotBlank
         private String password; // 비밀 번호
 
         @NotBlank
