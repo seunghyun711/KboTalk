@@ -1,6 +1,7 @@
 package KBOT.kboTalk.domain.member;
 
 import KBOT.kboTalk.web.member.JoinDto;
+import KBOT.kboTalk.web.member.LoginDto;
 import KBOT.kboTalk.web.member.MemberMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -90,5 +91,30 @@ class MemberServiceTest {
 
         // then
         System.out.println("passwordMatch = " + passwordMatch);
+    }
+
+    @Test
+    @DisplayName("로그인 기능 테스트")
+    public void loginTest() {
+        // given
+        Member member = new Member();
+        member.setUserId("a123");
+        member.setPassword("1234");
+        memberRepository.save(member);
+
+        LoginDto dto = new LoginDto();
+        dto.setUserId("a123");
+        dto.setPassword("1234");
+
+        Member loginedMember = mapper.loginDtoToMember(dto);
+
+        // when
+        Member result = memberService.login(loginedMember);
+
+        // then
+        System.out.println("result = " + result);
+        assertThat(result).isNotNull();
+//        assertThat(result).isNull();
+
     }
 }
