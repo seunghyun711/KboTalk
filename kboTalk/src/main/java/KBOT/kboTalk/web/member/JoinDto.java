@@ -1,7 +1,5 @@
 package KBOT.kboTalk.web.member;
 
-import KBOT.kboTalk.domain.member.MemberStatus;
-import KBOT.kboTalk.domain.member.MemberType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LoginDto { // 로그인 관련 dto
+public class JoinDto { // 회원가입 dto
 
     @NotBlank
     private String userId; // 회원 아이디

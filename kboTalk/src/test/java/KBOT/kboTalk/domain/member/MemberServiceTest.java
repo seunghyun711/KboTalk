@@ -1,6 +1,6 @@
 package KBOT.kboTalk.domain.member;
 
-import KBOT.kboTalk.web.member.LoginDto;
+import KBOT.kboTalk.web.member.JoinDto;
 import KBOT.kboTalk.web.member.MemberMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class MemberServiceTest {
     @DisplayName("회원가입 테스트")
     public void save() {
         // given
-        LoginDto dto = new LoginDto();
+        JoinDto dto = new JoinDto();
         dto.setUserId("test123");
         dto.setNickname("test");
         dto.setPassword("1234");
@@ -81,7 +81,7 @@ class MemberServiceTest {
     @DisplayName("비밀번호 검증 테스트")
     public void checkPassword() {
         // given
-        LoginDto dto = new LoginDto();
+        JoinDto dto = new JoinDto();
         dto.setPassword("1234");
         dto.setCheckPassword("1234");
 

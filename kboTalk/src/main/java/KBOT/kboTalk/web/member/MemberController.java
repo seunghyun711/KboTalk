@@ -22,13 +22,13 @@ public class MemberController {
 
     // 회원 가입 페이지 조회
     @GetMapping("/join")
-    public String joinForm(@ModelAttribute("member") LoginDto dto) {
+    public String joinForm(@ModelAttribute("member") JoinDto dto) {
         return "members/joinForm";
     }
 
     // 회원 가입
     @PostMapping("/join")
-    public String join(@Validated @ModelAttribute("member") LoginDto dto, BindingResult result) {
+    public String join(@Validated @ModelAttribute("member") JoinDto dto, BindingResult result) {
 
         // 비밀번호 검증
         if (!dto.isPasswordMatch()) {
