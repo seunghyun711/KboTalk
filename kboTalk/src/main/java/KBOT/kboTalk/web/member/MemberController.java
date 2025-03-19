@@ -40,10 +40,37 @@ public class MemberController {
             return "members/joinForm";
         }
 
-        Member member = memberMapper.loginDtoToMember(dto);
+        Member member = memberMapper.joinDtoToMember(dto);
         memberService.joinMember(member);
 
         return "redirect:/";
     }
 
+    // 로그인 페이지 조회
+    @GetMapping("/login")
+    public String joinForm(@ModelAttribute("login") LoginDto dto) {
+        return "members/loginForm";
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    public String login(@ModelAttribute("login") LoginDto dto, BindingResult result) {
+
+        if (result.hasErrors()) { // 로그인 시 오류가 발생한 경우
+            log.info("login error: {}", result.getAllErrors());
+            return "members/loginForm";
+        }
+
+        Member member = memberMapper.loginDtoToMember(dto);
+        Member loginMember = memberService.login(member);
+
+        // ID 혹은 비밀번호를 잘못 입력한 경우 로그인 폼으로 리턴
+        if (loginMember == null) {
+            result.reject("loginFail", "ID 혹은 비밀번호를 잘못 입력하셨거나 등록되지 않은 ID입니다.");
+            return "members/loginForm";
+        }
+
+        // 정상적으로 처리된 경우 메인화면으로 리턴
+        return "redirect:/";
+    }
 }

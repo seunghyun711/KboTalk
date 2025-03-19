@@ -34,6 +34,30 @@ public class MemberService {
     }
 
     /**
+     * <로그인>
+     * 1. 입력한 유저 아이디를 가진 유저 조회
+     * 2. 해당 유저의 비밀번호와 입력받은 비밀번호 비교
+     */
+    public Member login(Member member) {
+
+        // 1. 입력한 유저 아이디를 가진 유저 조회
+        Member findMember = memberRepository.findByUserId(member.getUserId()).orElse(null);
+
+        // 입력받은 아이디가 존재하지 않는 아이디이면 null을 리턴
+        if (findMember == null) {
+            return null;
+        }
+
+        // 2. 해당 유저의 비밀번호와 입력받은 비밀번호 비교
+        if (findMember.getPassword().equals(member.getPassword())) { // 비밀번호가 일치한 경우 해당 member 리턴
+            return member;
+        } else { // 비밀번호가 일치하지 않는 경우 null 리턴
+            return null;
+        }
+
+    }
+
+    /**
      * <유저 아이디 중복 확인>
      * 1. 유저 아이디 중복 확인
      * 2. 사용하고자 하는 닉네임이 존재하면 true를, 아니면 false를 리턴

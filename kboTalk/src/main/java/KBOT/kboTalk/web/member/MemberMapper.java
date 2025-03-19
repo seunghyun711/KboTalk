@@ -19,4 +19,17 @@ public class MemberMapper {
             return member;
         }
     }
+
+    // LoginDto -> Member
+    public Member loginDtoToMember(LoginDto dto) {
+        if (dto == null) {
+            return null;
+        } else {
+            Member member = new Member();
+            member.setUserId(dto.getUserId());
+            member.setPassword(dto.getPassword());
+
+            return member;
+        }
+    }
 }
