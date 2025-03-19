@@ -4,10 +4,8 @@ import KBOT.kboTalk.web.member.LoginDto;
 import KBOT.kboTalk.web.member.MemberMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +26,7 @@ class MemberServiceTest {
     @DisplayName("회원가입 테스트")
     public void save() {
         // given
-        LoginDto.JoinDto dto = new LoginDto.JoinDto();
+        LoginDto dto = new LoginDto();
         dto.setUserId("test123");
         dto.setNickname("test");
         dto.setPassword("1234");
@@ -37,7 +35,7 @@ class MemberServiceTest {
 //        dto.setMemberType(MemberType.USER);
         dto.setProfileImage("ssg.img");
 
-        Member member = mapper.joinDtoToMember(dto);
+        Member member = mapper.loginDtoToMember(dto);
 
         // when
         Member newMember = memberService.joinMember(member);
@@ -77,5 +75,20 @@ class MemberServiceTest {
 
         // then
         System.out.println("isExistUserId = " + isExistUserId);
+    }
+
+    @Test
+    @DisplayName("비밀번호 검증 테스트")
+    public void checkPassword() {
+        // given
+        LoginDto dto = new LoginDto();
+        dto.setPassword("1234");
+        dto.setCheckPassword("1234");
+
+        // when
+        boolean passwordMatch = dto.isPasswordMatch();
+
+        // then
+        System.out.println("passwordMatch = " + passwordMatch);
     }
 }
