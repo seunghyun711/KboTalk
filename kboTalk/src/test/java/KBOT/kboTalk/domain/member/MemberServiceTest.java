@@ -35,7 +35,7 @@ class MemberServiceTest {
 //        dto.setMemberType(MemberType.USER);
         dto.setProfileImage("ssg.img");
 
-        Member member = mapper.loginDtoToMember(dto);
+        Member member = mapper.joinDtoToMember(dto);
 
         // when
         Member newMember = memberService.joinMember(member);

@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MemberMapper {
-    // JoinForm -> Member
-    public Member loginDtoToMember(JoinDto dto){
+    // JoinDto -> Member
+    public Member joinDtoToMember(JoinDto dto){
         if (dto == null) {
             return null;
         }else{
