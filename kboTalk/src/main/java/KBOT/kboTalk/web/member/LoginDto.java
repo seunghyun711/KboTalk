@@ -30,7 +30,7 @@ public class LoginDto { // 로그인 관련 dto
 
     // 비밀번호 검증 메서드
     public boolean isPasswordMatch() {
-        return (password != null && checkPassword != null && password.equals(checkPassword));
+        return (password != null && password.equals(checkPassword));
     }
 }
 
