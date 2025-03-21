@@ -1,7 +1,14 @@
 package KBOT.kboTalk.web.member;
 
 import KBOT.kboTalk.domain.member.Member;
+import KBOT.kboTalk.domain.member.MemberRepository;
 import KBOT.kboTalk.domain.member.MemberService;
+import KBOT.kboTalk.domain.member.SessionMember;
+import KBOT.kboTalk.web.SessionConst;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
 
     // 회원 가입 페이지 조회
@@ -54,7 +62,8 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public String login(@ModelAttribute("login") LoginDto dto, BindingResult result) {
+    public String login(@Validated @ModelAttribute("login") LoginDto dto, BindingResult result,
+                        HttpServletRequest request) {
 
         if (result.hasErrors()) { // 로그인 시 오류가 발생한 경우
             log.info("login error: {}", result.getAllErrors());
@@ -70,7 +79,26 @@ public class MemberController {
             return "members/loginForm";
         }
 
+        // 로그인 성공 처리
+        HttpSession session = request.getSession();
+        log.info("session.getMaxAge : {}", session.getMaxInactiveInterval());
+        // 세션에 로그인 회원 정보 보관
+        SessionMember sessionMember = new SessionMember(loginMember); // Member 객체의 필드 중 필요한 필드만 있는 클래스로 변환
+        log.info("sessionMember's nickname : {}", sessionMember.getNickname());
+        session.setAttribute(SessionConst.LOGIN_MEMBER, sessionMember);
+
         // 정상적으로 처리된 경우 메인화면으로 리턴
+        return "redirect:/";
+    }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        // 세션 삭제
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         return "redirect:/";
     }
 }
