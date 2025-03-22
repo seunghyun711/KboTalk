@@ -21,15 +21,7 @@ public class HomeController {
     private final MemberRepository memberRepository;
 
     @GetMapping("/")
-    public String mainPage(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)SessionMember sessionMember, Model model) {
-
-        // 로그인 상태가 아닌 경우 메인 페이지로 바로 이동
-        if (sessionMember == null) {
-            return "main";
-        }
-
-        // 로그인한 사용자의 정보를 넘김
-        model.addAttribute("member", sessionMember);
+    public String mainPage() {
         return "main";
     }
 }
