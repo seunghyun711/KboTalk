@@ -6,6 +6,13 @@
 <body>
 
 <div th:replace="fragment/header :: header"></div>
-
+<div class="container">
+    <th:block th:if="${sessionMember != null}">
+        <h2>안녕하세요, <span th:text="${sessionMember.nickname}"></span>님!</h2>
+    </th:block>
+    <th:block th:unless="${sessionMember != null}">
+        <h2>환영합니다! 로그인 해주세요.</h2>
+    </th:block>
+</div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package KBOT.kboTalk.domain.member;
 
+import KBOT.kboTalk.web.member.JoinDto;
 import KBOT.kboTalk.web.member.LoginDto;
 import KBOT.kboTalk.web.member.MemberMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +27,7 @@ class MemberServiceTest {
     @DisplayName("회원가입 테스트")
     public void save() {
         // given
-        LoginDto dto = new LoginDto();
+        JoinDto dto = new JoinDto();
         dto.setUserId("test123");
         dto.setNickname("test");
         dto.setPassword("1234");
@@ -35,7 +36,7 @@ class MemberServiceTest {
 //        dto.setMemberType(MemberType.USER);
         dto.setProfileImage("ssg.img");
 
-        Member member = mapper.loginDtoToMember(dto);
+        Member member = mapper.joinDtoToMember(dto);
 
         // when
         Member newMember = memberService.joinMember(member);
@@ -81,7 +82,7 @@ class MemberServiceTest {
     @DisplayName("비밀번호 검증 테스트")
     public void checkPassword() {
         // given
-        LoginDto dto = new LoginDto();
+        JoinDto dto = new JoinDto();
         dto.setPassword("1234");
         dto.setCheckPassword("1234");
 
@@ -90,5 +91,30 @@ class MemberServiceTest {
 
         // then
         System.out.println("passwordMatch = " + passwordMatch);
+    }
+
+    @Test
+    @DisplayName("로그인 기능 테스트")
+    public void loginTest() {
+        // given
+        Member member = new Member();
+        member.setUserId("a123");
+        member.setPassword("1234");
+        memberRepository.save(member);
+
+        LoginDto dto = new LoginDto();
+        dto.setUserId("a123");
+        dto.setPassword("1234");
+
+        Member loginedMember = mapper.loginDtoToMember(dto);
+
+        // when
+        Member result = memberService.login(loginedMember);
+
+        // then
+        System.out.println("result = " + result);
+        assertThat(result).isNotNull();
+//        assertThat(result).isNull();
+
     }
 }

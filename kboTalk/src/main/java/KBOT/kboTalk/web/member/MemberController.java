@@ -1,7 +1,14 @@
 package KBOT.kboTalk.web.member;
 
 import KBOT.kboTalk.domain.member.Member;
+import KBOT.kboTalk.domain.member.MemberRepository;
 import KBOT.kboTalk.domain.member.MemberService;
+import KBOT.kboTalk.domain.member.SessionMember;
+import KBOT.kboTalk.web.SessionConst;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,17 +25,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
 
     // 회원 가입 페이지 조회
     @GetMapping("/join")
-    public String joinForm(@ModelAttribute("member") LoginDto dto) {
+    public String joinForm(@ModelAttribute("member") JoinDto dto) {
         return "members/joinForm";
     }
 
     // 회원 가입
     @PostMapping("/join")
-    public String join(@Validated @ModelAttribute("member") LoginDto dto, BindingResult result) {
+    public String join(@Validated @ModelAttribute("member") JoinDto dto, BindingResult result) {
 
         // 비밀번호 검증
         if (!dto.isPasswordMatch()) {
@@ -40,10 +48,57 @@ public class MemberController {
             return "members/joinForm";
         }
 
-        Member member = memberMapper.loginDtoToMember(dto);
+        Member member = memberMapper.joinDtoToMember(dto);
         memberService.joinMember(member);
 
         return "redirect:/";
     }
 
+    // 로그인 페이지 조회
+    @GetMapping("/login")
+    public String joinForm(@ModelAttribute("login") LoginDto dto) {
+        return "members/loginForm";
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    public String login(@Validated @ModelAttribute("login") LoginDto dto, BindingResult result,
+                        HttpServletRequest request) {
+
+        if (result.hasErrors()) { // 로그인 시 오류가 발생한 경우
+            log.info("login error: {}", result.getAllErrors());
+            return "members/loginForm";
+        }
+
+        Member member = memberMapper.loginDtoToMember(dto);
+        Member loginMember = memberService.login(member);
+
+        // ID 혹은 비밀번호를 잘못 입력한 경우 로그인 폼으로 리턴
+        if (loginMember == null) {
+            result.reject("loginFail", "ID 혹은 비밀번호를 잘못 입력하셨거나 등록되지 않은 ID입니다.");
+            return "members/loginForm";
+        }
+
+        // 로그인 성공 처리
+        HttpSession session = request.getSession();
+        log.info("session.getMaxAge : {}", session.getMaxInactiveInterval());
+        // 세션에 로그인 회원 정보 보관
+        SessionMember sessionMember = new SessionMember(loginMember); // Member 객체의 필드 중 필요한 필드만 있는 클래스로 변환
+        log.info("sessionMember's nickname : {}", sessionMember.getNickname());
+        session.setAttribute(SessionConst.LOGIN_MEMBER, sessionMember);
+
+        // 정상적으로 처리된 경우 메인화면으로 리턴
+        return "redirect:/";
+    }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        // 세션 삭제
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
+    }
 }

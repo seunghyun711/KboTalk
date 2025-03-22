@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MemberMapper {
-    // JoinForm -> Member
-    public Member loginDtoToMember(LoginDto dto){
+    // JoinDto -> Member
+    public Member joinDtoToMember(JoinDto dto){
         if (dto == null) {
             return null;
         }else{
@@ -15,6 +15,19 @@ public class MemberMapper {
             member.setNickname(dto.getNickname());
             member.setPassword(dto.getPassword());
             member.setProfileImgUrl(dto.getProfileImage());
+
+            return member;
+        }
+    }
+
+    // LoginDto -> Member
+    public Member loginDtoToMember(LoginDto dto) {
+        if (dto == null) {
+            return null;
+        } else {
+            Member member = new Member();
+            member.setUserId(dto.getUserId());
+            member.setPassword(dto.getPassword());
 
             return member;
         }
