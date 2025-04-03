@@ -101,4 +101,11 @@ public class MemberController {
         }
         return "redirect:/";
     }
+
+    // 회원 정보 페이지
+    // TODO : 인터셉터 구현 테스트를 위해 임시로 구현한 코드임. 추후에 제대로 구현할 것
+    @GetMapping("/memberInfo")
+    public String memberInfo() {
+        return "members/memberInfo";
+    }
 }
