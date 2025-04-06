@@ -41,20 +41,10 @@ public class MemberService {
     public Member login(Member member) {
 
         // 1. 입력한 유저 아이디를 가진 유저 조회
-        Member findMember = memberRepository.findByUserId(member.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("회원 정보가 없음."));
-
-        // 입력받은 아이디가 존재하지 않는 아이디이면 null을 리턴
-        if (findMember == null) {
-            return null;
-        }
-
-        // 2. 해당 유저의 비밀번호와 입력받은 비밀번호 비교
-        if (findMember.getPassword().equals(member.getPassword())) { // 비밀번호가 일치한 경우 해당 member 리턴
-            return findMember;
-        } else { // 비밀번호가 일치하지 않는 경우 null 리턴
-            return null;
-        }
+        return memberRepository.findByUserId(member.getUserId())
+                // 2. 해당 유저의 비밀번호와 입력받은 비밀번호 비교
+                .filter(m -> m.getPassword().equals(member.getPassword()))
+                .orElse(null); // 아이디가 db에 존재하지 않거나 비밀번호가 틀린 경우 null 리턴(로그인 실패)
 
     }
 
