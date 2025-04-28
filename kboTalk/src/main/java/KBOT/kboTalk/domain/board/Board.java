@@ -2,10 +2,12 @@ package KBOT.kboTalk.domain.board;
 
 import KBOT.kboTalk.domain.member.Member;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Builder
 public class Board {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "BOARD_ID")
