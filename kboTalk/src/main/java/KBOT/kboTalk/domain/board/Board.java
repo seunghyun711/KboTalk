@@ -1,5 +1,6 @@
 package KBOT.kboTalk.domain.board;
 
+import KBOT.kboTalk.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -17,7 +18,7 @@ public class Board {
     private String content; // 내용
 
     @Column
-    private Long boardCount; // 조회수
+    private Long viewCount; // 조회수
 
     @Column
     private Long recommend; // 추천수
@@ -27,4 +28,9 @@ public class Board {
 
     @Column
     private String imageUrl; // 이미지 url
+
+    // Board - Member 다대일 관계로 매핑
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 }
