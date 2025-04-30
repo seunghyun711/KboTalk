@@ -17,6 +17,7 @@ public class Board {
     private String title; // 제목
 
     @Column
+    @Lob
     private String content; // 내용
 
     @Column
