@@ -21,6 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         $image.attr('alt', '첨부 이미지');
                     });
                 });
+            },
+            onMediaDelete: function ($target){
+                const imageUrl = $target.attr('src');
+                deleteImage(imageUrl);
             }
         }
     });

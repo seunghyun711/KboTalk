@@ -51,9 +51,37 @@ public class BoardService {
             Files.copy(file.getInputStream(), savePath);
 
             log.info("savePath:{}", savePath);
+            // 4. 파일명 리턴
             return "/upload/" + savedFilename;
         } catch (IOException e) {
             throw new RuntimeException("파일 저장 실패", e);
+        }
+    }
+
+    /**
+     * <게시글 이미지 삭제>
+     * 1. 삭제하려는 이미지 유효성 검사
+     * 2. 서버 파일 시스템 경로로 변환
+     * 3. 이미지 삭제
+     */
+    public void deleteImageByUrl(String imageUrl) {
+        // 1. 삭제하려는 이미지 유효성 검사
+        if (imageUrl == null || !imageUrl.startsWith("/upload")) {
+            throw new IllegalArgumentException("잘못된 이미지 경로 입니다.");
+        }
+
+        // 2. 서버 파일 시스템 경로로 변환
+        String filename = imageUrl.substring("/upload/".length());
+        Path path = Paths.get("C:/kbt/uploads", filename);
+        log.debug("삭제 대상 파일 경로: {}", path.toAbsolutePath());
+        log.debug("파일 존재 여부: {}", Files.exists(path));
+
+        try {
+            Files.deleteIfExists(path);
+            log.info("이미지 삭제: {}", path);
+        } catch (IOException e) {
+            log.error("이미지 삭제 실패: {}", path, e);
+            throw new RuntimeException("이미지 삭제 실패", e);
         }
     }
 }
