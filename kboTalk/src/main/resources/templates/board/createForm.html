@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>새 게시글</title>
+
+    <!-- 공통 Head 영역을 추가 -->
+    <th:block th:replace="~{fragment/header :: commonHead}"></th:block>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+
+    <!-- summernote 설정 -->
+    <script src="/js/board/summernoteInit.js"></script>
+    <!-- 이미지 업로드 JS 파일 -->
+    <script src="/js/board/imageUpload.js"></script>
+    <!-- 이미지 삭제 JS 파일 -->
+    <script src="/js/board/imageDelete.js"></script>
+
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- 헤더 추가 -->
+<div th:replace="~{fragment/header :: header}"></div>
+
+<div class="container">
+    <h2 class="mb-4">새 게시글 작성</h2>
+
+    <form th:object="${board}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
+            <input type="text" th:field="*{title}" id="title" class="form-control" placeholder="제목을 입력하세요" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">제목 에러</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="summernote" class="form-label">내용</label>
+            <textarea id="summernote" th:field="*{content}" class="form-control"></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">내용 에러</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="categoryId" class="form-label">카테고리</label>
+            <select th:field="*{categoryId}" id="categoryId" class="form-select" required>
+                <option value="">-- 카테고리를 선택하세요 --</option>
+                <option value="1">자유게시판</option>
+                <option value="2">질문게시판</option>
+                <option value="3">정보게시판</option>
+                <!-- 필요하면 서버에서 카테고리 리스트를 모델로 넘겨도 좋음 -->
+            </select>
+            <div class="text-danger" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">카테고리 에러</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">등록하기</button>
+        <a th:href="@{/}" class="btn btn-secondary">취소</a>
+    </form>
+</div>
+
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        $('#summernote').summernote({-->
+<!--            placeholder: '본문 내용을 입력하세요...',-->
+<!--            tabsize: 2,-->
+<!--            height: 300,-->
+<!--            toolbar: [-->
+<!--                ['style', ['style']],-->
+<!--                ['font', ['bold', 'underline', 'clear']],-->
+<!--                ['color', ['color']],-->
+<!--                ['para', ['ul', 'ol', 'paragraph']],-->
+<!--                ['insert', ['link', 'picture', 'video']],-->
+<!--                ['view', ['fullscreen', 'codeview', 'help']]-->
+<!--            ]-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+</body>
+</html>

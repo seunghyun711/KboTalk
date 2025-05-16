@@ -1,10 +1,13 @@
 package KBOT.kboTalk.domain.board;
 
+import KBOT.kboTalk.domain.member.Member;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Builder
 public class Board {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "BOARD_ID")
@@ -14,10 +17,11 @@ public class Board {
     private String title; // 제목
 
     @Column
+    @Lob
     private String content; // 내용
 
     @Column
-    private Long boardCount; // 조회수
+    private Long viewCount; // 조회수
 
     @Column
     private Long recommend; // 추천수
@@ -27,4 +31,14 @@ public class Board {
 
     @Column
     private String imageUrl; // 이미지 url
+
+    // Board - Member 다대일 관계로 매핑
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    // Board - BoardCategory 연관관계 매핑
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_ID")
+    private BoardCategory category;
 }
