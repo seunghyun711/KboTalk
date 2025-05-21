@@ -1,15 +1,18 @@
 package KBOT.kboTalk.domain.board;
 
+import KBOT.kboTalk.domain.exception.BoardNotFoundException;
 import KBOT.kboTalk.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,6 +27,7 @@ public class BoardService {
      * <게시글 작성>
      * TODO : 작성자 관련 정보도 추가할 것
      */
+    @Transactional
     public void createBoard(Board board) {
         boardRepository.save(board);
     }
@@ -83,5 +87,21 @@ public class BoardService {
             log.error("이미지 삭제 실패: {}", path, e);
             throw new RuntimeException("이미지 삭제 실패", e);
         }
+    }
+
+    /**
+     * 게시글 상세 조회
+     * 1. 게시글 존재여부 파악
+     * 2. 존재하는 경우 Board 객체 리턴
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Board getBoardPage(Long id) {
+        // 1. 게시글 존재여부 파악
+        Board findBoard = boardRepository.findById(id).orElseThrow(() ->
+                new BoardNotFoundException("존재하지 않는 게시글"));
+
+        // 2. 존재하는 경우 Board 객체 리턴
+        return findBoard;
     }
 }

@@ -11,6 +11,7 @@ import KBOT.kboTalk.web.SessionConst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,16 @@ public class BoardController {
         boardService.createBoard(board);
 
         return "redirect:/";
+    }
+
+    // 게시글 상세 페이지 조회
+    @GetMapping("/{id}")
+    public String getBoard(@PathVariable("id") Long id, Model model) {
+        Board board = boardService.getBoardPage(id);
+
+        model.addAttribute("board", board);
+
+        return "board/boardDetail";
     }
 
 }
