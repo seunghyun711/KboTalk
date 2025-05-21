@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${board.title}">게시글 상세</title>
+
+    <!-- 공통 Head 영역 포함 -->
+    <th:block th:replace="~{fragment/header :: commonHead}"></th:block>
+
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        .content-box {
+            min-height: 300px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 헤더 추가 -->
+<div th:replace="~{fragment/header :: header}"></div>
+
+<div class="container">
+    <h2 th:text="${board.title}" class="mb-4">게시글 제목</h2>
+
+    <div class="mb-3">
+        <strong>카테고리: </strong>
+        <span th:text="${board.category.category}">카테고리명</span>
+    </div>
+
+    <div class="mb-3">
+        <strong>작성자: </strong>
+        <span th:text="${board.member.nickname}">작성자</span>
+    </div>
+
+<!--    <div class="mb-3">-->
+<!--        <strong>작성일: </strong>-->
+<!--        <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>-->
+<!--    </div>-->
+
+    <div class="content-box mb-4" th:utext="${board.content}">
+        <!-- 게시글 본문 (HTML 태그 포함 렌더링) -->
+    </div>
+
+    <a th:href="@{/}" class="btn btn-secondary">목록으로</a>
+    <a th:href="@{/board/edit/{id}(id=${board.id})}" class="btn btn-warning">수정</a>
+    <form th:action="@{/board/delete/{id}(id=${board.id})}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+    </form>
+</div>
+
+</body>
+</html>
