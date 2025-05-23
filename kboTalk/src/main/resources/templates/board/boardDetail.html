@@ -39,10 +39,20 @@
         <span th:text="${board.member.nickname}">작성자</span>
     </div>
 
-<!--    <div class="mb-3">-->
-<!--        <strong>작성일: </strong>-->
-<!--        <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>-->
-<!--    </div>-->
+    <div class="mb-3">
+        <strong>작성일: </strong>
+        <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+    </div>
+
+    <div class="mb-3">
+        <strong>조회수: </strong>
+        <span th:text="${board.viewCount}">조회수</span>
+    </div>
+
+    <div class="mb-3">
+        <strong>추천수: </strong>
+        <span th:text="${board.recommend}">추천수</span>
+    </div>
 
     <div class="content-box mb-4" th:utext="${board.content}">
         <!-- 게시글 본문 (HTML 태그 포함 렌더링) -->
