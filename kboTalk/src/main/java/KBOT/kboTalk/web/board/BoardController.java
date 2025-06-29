@@ -8,6 +8,7 @@ import KBOT.kboTalk.domain.member.Member;
 import KBOT.kboTalk.domain.member.MemberRepository;
 import KBOT.kboTalk.domain.member.SessionMember;
 import KBOT.kboTalk.web.SessionConst;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -60,9 +61,15 @@ public class BoardController {
     }
 
     // 게시글 상세 페이지 조회
-    @GetMapping("/{id}")
-    public String getBoard(@PathVariable("id") Long id, Model model) {
-        Board board = boardService.getBoardPage(id);
+    @GetMapping("/{boardId}")
+    public String getBoard(@PathVariable("boardId") Long boardId, Model model,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) SessionMember loginMember,
+                           HttpServletRequest request) {
+
+        Long viewerId = loginMember != null ? loginMember.getMemberId() : null;
+        String ip = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
+        Board board = boardService.getBoardPage(boardId, viewerId, ip, userAgent);
 
         model.addAttribute("board", board);
 

@@ -4,24 +4,30 @@ import KBOT.kboTalk.domain.exception.BoardNotFoundException;
 import KBOT.kboTalk.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
+import java.time.Duration;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class BoardService {
+
+    private static final Duration VIEW_CACHE_TTL = Duration.ofMinutes(30); // redis에 저장되는 데이터의 ttl
+
     private static final String UPLOAD_DIR = "C:/kbt/uploads"; // 이미지가 저장될 경로
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     /**
      * <게시글 작성>
@@ -92,16 +98,38 @@ public class BoardService {
     /**
      * 게시글 상세 조회
      * 1. 게시글 존재여부 파악
-     * 2. 존재하는 경우 Board 객체 리턴
+     * 2. 조회수 카운팅
+     *  2-1. 로그인 회원인 경우 viewd:{boardId}:member{memberId}형식클 키로 설정
+     *  2-2. 비로그인 회원인 경우 viewd:{boardId}:anon{ip+user-agent}형식을 키로 설정
+     * 3. 2번 과정을 통해 조합된 키가 redis에 존재하지 않는 경우 조회수+1을 하고 해당 키를 redis에 저장
+     * 4. board 리턴
      * @return
      */
     @Transactional(readOnly = true)
-    public Board getBoardPage(Long id) {
+    public Board getBoardPage(Long boardId, Long viewerId, String ip, String userAgent) {
         // 1. 게시글 존재여부 파악
-        Board findBoard = boardRepository.findById(id).orElseThrow(() ->
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() ->
                 new BoardNotFoundException("존재하지 않는 게시글"));
 
-        // 2. 존재하는 경우 Board 객체 리턴
+
+        // 2. 조회수 카운팅
+        String key;
+
+        // 2-1. 로그인 회원인 경우 viewd:{boardId}:member{memberId}형식클 키로 설정
+        if (viewerId != null) {
+            key = String.format("viewed:%d:user:%d", boardId, viewerId);
+        } else { // 2-2. 비로그인 회원인 경우 viewd:{boardId}:anon{ip+user-agent}형식을 키로 설정
+            String hashed = DigestUtils.md5DigestAsHex((ip + userAgent).getBytes()); // ip+userAgent의 해시
+            key = String.format("viewed:%d:anon:%s", boardId, hashed);
+        }
+
+        // 3. 2번 과정을 통해 조합된 키가 redis에 존재하지 않는 경우 조회수+1을 하고 해당 키를 redis에 저장
+        Boolean isNew = redisTemplate.opsForValue().setIfAbsent(key, "1", VIEW_CACHE_TTL);
+        if (Boolean.TRUE.equals(isNew)) {
+            redisTemplate.opsForValue().increment("board:views:" + boardId);
+        }
+
+        // 4. board 리턴
         return findBoard;
     }
 }
