@@ -8,9 +8,11 @@ import KBOT.kboTalk.domain.member.Member;
 import KBOT.kboTalk.domain.member.MemberRepository;
 import KBOT.kboTalk.domain.member.SessionMember;
 import KBOT.kboTalk.web.SessionConst;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +58,22 @@ public class BoardController {
         boardService.createBoard(board);
 
         return "redirect:/";
+    }
+
+    // 게시글 상세 페이지 조회
+    @GetMapping("/{boardId}")
+    public String getBoard(@PathVariable("boardId") Long boardId, Model model,
+                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) SessionMember loginMember,
+                           HttpServletRequest request) {
+
+        Long viewerId = loginMember != null ? loginMember.getMemberId() : null;
+        String ip = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
+        Board board = boardService.getBoardPage(boardId, viewerId, ip, userAgent);
+
+        model.addAttribute("board", board);
+
+        return "board/boardDetail";
     }
 
 }
