@@ -26,7 +26,8 @@ public class Board extends BaseEntity {
     private String content; // 내용
 
     @Column
-    private Long viewCount; // 조회수
+    @Builder.Default // Builder는 무조건 해당 타입의 초기값으로 초기화 되기 대문에 0으로 초기화하기 위해 해당 애너테이션을 붙임
+    private Long viewCount = 0L; // 조회수
 
     @Column
     private Long recommend; // 추천수
